@@ -1,4 +1,4 @@
-import requests, time, json, config
+import requests, time, json, config, os
 import pandas as pd
 from urllib.error import HTTPError
 
@@ -16,8 +16,8 @@ def request_reddit_data(subreddit, query, count, last_post = "", delay = 2):
         print("Succesfully scraped 25 posts...")
         return json.loads(resp_text)["data"]
     except:
-        print("Too many requests, retrying after 10 seconds...")
-        time.sleep(10)
+        print(f"Too many requests, retrying after {config.WAIT_TIME} seconds...")
+        time.sleep(config.WAIT_TIME)
         return request_reddit_data(subreddit, query, count, last_post, delay)
 
 def get_reddit_posts(subreddit, query, limit = 25):
@@ -26,15 +26,20 @@ def get_reddit_posts(subreddit, query, limit = 25):
 
     posts = pd.DataFrame()
     entries = []
-
     last_post_id = ""
     processed = 0
+    data = []
+
     while(limit >= 25):
-        data = request_reddit_data(subreddit, query, processed, last_post_id) 
-        entries.extend(data["children"])
-        limit -= 25
-        processed += 25
-        last_post_id = data["after"]
+        data = request_reddit_data(subreddit, query, processed, last_post_id)
+        if(len(data["children"]) > 0):
+            entries.extend(data["children"])
+            limit -= 25
+            processed += 25
+            last_post_id = data["after"]
+        else:
+            print("No more posts, stop scraping for this query...")
+            limit = 0
         
     for entry in entries:
         new_entry = {feature: entry["data"][feature] for feature in config.FEATURES}
@@ -44,8 +49,11 @@ def get_reddit_posts(subreddit, query, limit = 25):
 
 def main():
     queries = ["student in", "i am studying", "in university", "pursuing a degree"]
-    subreddits = ["MentalHealthSupport"]#["MentalHealthSupport", "mentalhealth","Anxiety","mentalillness", "selfimprovement","Depression","Offmychest",""]
-    post_count = 25
+    subreddits = ["MentalHealthSupport", "mentalhealth","Anxiety","mentalillness", "selfimprovement","Depression","Offmychest",""]
+    post_count = 200
+
+    if not os.path.exists(config.OUTPUT_FOLDER):
+        os.makedirs(config.OUTPUT_FOLDER)
 
     for subreddit in subreddits:
         for query in queries:
