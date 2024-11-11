@@ -2,7 +2,7 @@ import requests, time, json, config
 import pandas as pd
 from urllib.error import HTTPError
 
-def request_reddit_data(subreddit, query, count, last_post = "", delay = 0.1):
+def request_reddit_data(subreddit, query, count, last_post = "", delay = 2):
     req_url = f"https://old.reddit.com/r/{subreddit}/search.json?q={query}&restrict_sr=on&sort=top&t=all"
     if last_post != "":
         req_url = f"https://old.reddit.com/r/{subreddit}/search.json?q={query}&restrict_sr=on&sort=top&t=all&count={count}&after={last_post}"
@@ -44,17 +44,14 @@ def get_reddit_posts(subreddit, query, limit = 25):
 
 def main():
     queries = ["student in", "i am studying", "in university", "pursuing a degree"]
-    subreddits = ["MentalHealthSupport", "mentalhealth","Anxiety","mentalillness", "selfimprovement","Depression","Offmychest",""]
-    post_count = 100
+    subreddits = ["MentalHealthSupport"]#["MentalHealthSupport", "mentalhealth","Anxiety","mentalillness", "selfimprovement","Depression","Offmychest",""]
+    post_count = 25
 
     for subreddit in subreddits:
         for query in queries:
             print(f"Currently looking op posts containing '{query}' in subreddit '{subreddit}'")
             posts = get_reddit_posts(subreddit, query, post_count)
             posts.to_csv(f"{config.OUTPUT_FOLDER}{subreddit}_{query}.csv")
-
-    # posts = get_reddit_posts("pics", "cool", 150)
-    # posts.to_csv("output_test.csv")
 
 if __name__ == "__main__":
     main()
