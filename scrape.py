@@ -50,7 +50,7 @@ def get_reddit_posts(subreddit, query, limit = 25):
 def main():
     queries = ["student in", "i am studying", "in university", "pursuing a degree"]
     subreddits = ["MentalHealthSupport", "mentalhealth","Anxiety","mentalillness", "selfimprovement","Depression","Offmychest"]
-    post_count = 25
+    post_count = 100
 
     if not os.path.exists(config.OUTPUT_FOLDER):
         os.makedirs(config.OUTPUT_FOLDER)
