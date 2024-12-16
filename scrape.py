@@ -49,8 +49,11 @@ def get_reddit_posts(subreddit, query, limit = 25):
 
 def main():
     queries = ["student in", "i am studying", "in university", "pursuing a degree"]
-    subreddits = ["MentalHealthSupport", "mentalhealth","Anxiety","mentalillness", "selfimprovement","Depression","Offmychest"]
-    post_count = 100
+    subreddits = ["selfimprovement","Depression","Offmychest"]#["MentalHealthSupport", "mentalhealth","Anxiety","mentalillness", "selfimprovement","Depression","Offmychest"]
+    post_count = 800
+
+    total_posts = post_count * len(queries) * len(subreddits)
+    print(f"Scraping about {total_posts} posts...")
 
     if not os.path.exists(config.OUTPUT_FOLDER):
         os.makedirs(config.OUTPUT_FOLDER)
