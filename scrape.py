@@ -48,8 +48,8 @@ def get_reddit_posts(subreddit, query, limit = 25):
     return posts
 
 def main():
-    queries = ["student in", "i am studying", "in university", "pursuing a degree"]
-    subreddits = ["selfimprovement","Depression","Offmychest"]#["MentalHealthSupport", "mentalhealth","Anxiety","mentalillness", "selfimprovement","Depression","Offmychest"]
+    queries = ["student in", "i am studying", "in university", "pursuing a degree", "in uni", "I study"]
+    subreddits = ["selfimprovement","Depression","Offmychest","MentalHealthSupport", "mentalhealth","Anxiety","mentalillness", "selfimprovement","Depression","Offmychest","TrueOffMyChest"]
     post_count = 800
 
     total_posts = post_count * len(queries) * len(subreddits)
